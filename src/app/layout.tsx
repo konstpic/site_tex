@@ -25,6 +25,7 @@ export const metadata: Metadata = {
   },
   description:
     "Онлайн-консультации и настройка Windows, macOS, программ и мессенджеров. Без выезда — AnyDesk, Zoom. Быстро и безопасно.",
+  themeColor: "#0d9488",
 };
 
 export default function RootLayout({
