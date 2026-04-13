@@ -3,6 +3,8 @@
  * @see https://yookassa.ru/developers/api
  */
 
+import { getPaymentSuccessReturnUrl } from "@/lib/payment-gateway";
+
 const YOOKASSA_API = "https://api.yookassa.ru/v3";
 
 function requireEnv(name: string): string {
@@ -131,5 +133,5 @@ export async function yooKassaGetPayment(paymentId: string): Promise<{
 }
 
 export function getYooKassaReturnUrl(): string {
-  return requireEnv("YOOKASSA_RETURN_URL");
+  return getPaymentSuccessReturnUrl();
 }

@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 import { useCart } from "@/context/cart-context";
 
-/** Очищает корзину один раз после успешной оплаты (по данным ЮKassa). */
+/** Очищает корзину один раз после успешной оплаты (подтверждение через /api/payments/checkout). */
 export function ClearCartOnPaymentSuccess({ shouldClear }: { shouldClear: boolean }) {
   const { clear } = useCart();
   const done = useRef(false);

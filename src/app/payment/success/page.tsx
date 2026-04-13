@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { ClearCartOnPaymentSuccess } from "@/components/payment-success-clear-cart";
-import { YOOKASSA_PENDING_PAYMENT_KEY } from "@/lib/yookassa-storage";
+import { PENDING_PAYMENT_ID_KEY } from "@/lib/payment-storage";
 
 type PaymentState =
   | { phase: "loading" }
@@ -24,9 +24,12 @@ function PaymentSuccessContent() {
   useEffect(() => {
     let paymentId = searchParams.get("payment_id")?.trim();
     if (!paymentId && typeof window !== "undefined") {
-      const stored = sessionStorage.getItem(YOOKASSA_PENDING_PAYMENT_KEY);
+      const stored =
+        sessionStorage.getItem(PENDING_PAYMENT_ID_KEY) ||
+        sessionStorage.getItem("yookassa_pending_payment_id");
       if (stored) {
-        sessionStorage.removeItem(YOOKASSA_PENDING_PAYMENT_KEY);
+        sessionStorage.removeItem(PENDING_PAYMENT_ID_KEY);
+        sessionStorage.removeItem("yookassa_pending_payment_id");
         paymentId = stored;
         window.history.replaceState(
           null,
@@ -51,7 +54,7 @@ function PaymentSuccessContent() {
     (async () => {
       try {
         const res = await fetch(
-          `/api/payments/yookassa?payment_id=${encodeURIComponent(paymentId)}`,
+          `/api/payments/checkout?payment_id=${encodeURIComponent(paymentId)}`,
         );
         const data = (await res.json()) as {
           error?: string;

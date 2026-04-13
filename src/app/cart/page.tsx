@@ -8,7 +8,7 @@ import { ScrollReveal } from "@/components/scroll-reveal";
 import { sectionRevealVariant } from "@/lib/reveal-variants";
 import { useCart } from "@/context/cart-context";
 import { formatPrice, getService } from "@/lib/services";
-import { YOOKASSA_PENDING_PAYMENT_KEY } from "@/lib/yookassa-storage";
+import { PENDING_PAYMENT_ID_KEY } from "@/lib/payment-storage";
 
 export default function CartPage() {
   const { lines, setQty, remove } = useCart();
@@ -53,7 +53,7 @@ export default function CartPage() {
     setPayError(null);
     setPaying(true);
     try {
-      const res = await fetch("/api/payments/yookassa", {
+      const res = await fetch("/api/payments/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -68,18 +68,54 @@ export default function CartPage() {
         error?: string;
         confirmationUrl?: string;
         paymentId?: string;
+        paymentAction?: string;
+        paymentMethod?: string;
+        paymentForm?: Record<string, string>;
       };
       if (!res.ok) {
         throw new Error(data.error || "Не удалось создать платёж");
       }
-      if (data.confirmationUrl) {
-        if (data.paymentId) {
-          sessionStorage.setItem(YOOKASSA_PENDING_PAYMENT_KEY, data.paymentId);
+      if (data.paymentId) {
+        sessionStorage.setItem(PENDING_PAYMENT_ID_KEY, data.paymentId);
+      }
+      const payAction = (data.paymentAction || "").trim();
+      const payMethod = (data.paymentMethod || "").toUpperCase();
+      const form = data.paymentForm;
+      if (
+        payAction &&
+        payMethod === "POST" &&
+        form &&
+        typeof form === "object" &&
+        !Array.isArray(form)
+      ) {
+        try {
+          const u = new URL(payAction);
+          if (u.hostname !== "auth.robokassa.ru") {
+            throw new Error("bad payment host");
+          }
+          const el = document.createElement("form");
+          el.method = "POST";
+          el.action = payAction;
+          el.style.display = "none";
+          for (const [name, value] of Object.entries(form)) {
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = name;
+            input.value = value;
+            el.appendChild(input);
+          }
+          document.body.appendChild(el);
+          el.submit();
+        } catch {
+          throw new Error("Некорректные данные для перехода к оплате");
         }
+        return;
+      }
+      if (data.confirmationUrl) {
         window.location.assign(data.confirmationUrl);
         return;
       }
-      throw new Error("Платёжная система не вернула ссылку на оплату");
+      throw new Error("Платёжная система не вернула данные для оплаты");
     } catch (e) {
       setPayError(e instanceof Error ? e.message : "Ошибка оплаты");
     } finally {
@@ -100,8 +136,8 @@ export default function CartPage() {
           className="mt-3 text-slate-600 animate-fade-in-up"
           style={{ animationDelay: "0.12s" }}
         >
-          Проверьте состав заказа. Оплата проходит на стороне ЮKassa банковской картой; после оплаты
-          вы вернётесь на сайт.
+          Проверьте состав заказа. Оплата проходит на стороне платёжного шлюза (ЮKassa или Robokassa);
+          после оплаты вы вернётесь на сайт.
         </p>
       </ScrollReveal>
 
