@@ -20,11 +20,11 @@ const merriweather = Merriweather({
 
 export const metadata: Metadata = {
   title: {
-    default: `${SITE.name} — удалённая техническая помощь`,
+    default: `${SITE.name} — защищённый доступ в сеть`,
     template: `%s — ${SITE.name}`,
   },
   description:
-    "Онлайн-консультации и настройка Windows, macOS, программ и мессенджеров. Без выезда — AnyDesk, Zoom. Быстро и безопасно.",
+    "Онлайн-сервис цифрового доступа к защищённой сетевой инфраструктуре. Повышаем безопасность соединения и защиту данных в интернете.",
   themeColor: "#0d9488",
 };
 

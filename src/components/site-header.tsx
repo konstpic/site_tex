@@ -65,7 +65,7 @@ export function SiteHeader() {
             {SITE.name}
           </span>
           <span className="hidden text-xs text-slate-500 transition-colors group-hover:text-slate-600 sm:block">
-            консультации и настройка техники онлайн
+            защищённый доступ в сеть
           </span>
         </Link>
         <nav className="hidden items-center gap-6 md:flex" aria-label="Основное меню">

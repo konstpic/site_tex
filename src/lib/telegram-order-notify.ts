@@ -73,10 +73,11 @@ export async function notifyOrderLeadToTelegram(params: {
   amountValue: string;
   description: string;
   lines: CartLineInput[];
-  gateway: "yookassa" | "robokassa";
+  gateway: "yookassa" | "selfwork";
 }): Promise<void> {
   const linesBlock = summarizeLines(params.lines);
-  const gwLabel = params.gateway === "robokassa" ? "Robokassa" : "ЮKassa";
+  const gwLabel =
+    params.gateway === "selfwork" ? "Сам.Эквайринг" : "ЮKassa";
 
   const text = [
     "Новая заявка с сайта (переход к оплате)",

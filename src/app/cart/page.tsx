@@ -90,7 +90,8 @@ export default function CartPage() {
       ) {
         try {
           const u = new URL(payAction);
-          if (u.hostname !== "auth.robokassa.ru") {
+          const allowedHosts = new Set(["pro.selfwork.ru"]);
+          if (!allowedHosts.has(u.hostname)) {
             throw new Error("bad payment host");
           }
           const el = document.createElement("form");
@@ -130,14 +131,14 @@ export default function CartPage() {
           className="font-display text-4xl font-semibold tracking-tight text-slate-900 animate-fade-in-up"
           style={{ animationDelay: "0.04s" }}
         >
-          Корзина и оплата
+          Заказ и оплата
         </h1>
         <p
           className="mt-3 text-slate-600 animate-fade-in-up"
           style={{ animationDelay: "0.12s" }}
         >
-          Проверьте состав заказа. Оплата проходит на стороне платёжного шлюза (ЮKassa или Robokassa);
-          после оплаты вы вернётесь на сайт.
+          Проверьте тарифы в заказе. Оплата на стороне платёжного провайдера (ЮKassa или
+          Сам.Эквайринг); после оплаты вы вернётесь на сайт.
         </p>
       </ScrollReveal>
 
@@ -149,7 +150,7 @@ export default function CartPage() {
               href="/services"
               className="mt-4 inline-flex rounded-xl bg-teal-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-teal-700"
             >
-              Выбрать услуги
+              Выбрать тарифы
             </Link>
           </div>
         </ScrollReveal>
@@ -215,7 +216,7 @@ export default function CartPage() {
               Ваши контакты
             </h2>
             <p className="mt-1 text-sm text-slate-600">
-              Укажите данные, по которым мы сможем связаться после оплаты.
+              Укажите контакты для выдачи доступа и связи после оплаты.
             </p>
             <div className="mt-5 grid gap-4 sm:grid-cols-1">
               <label className="block">
@@ -266,20 +267,22 @@ export default function CartPage() {
             className="mt-8"
           >
             <div className="rounded-2xl border border-teal-200 bg-teal-50/60 p-5 text-sm text-slate-800">
-            <p className="font-semibold text-slate-900">Как вы получите услугу после оплаты</p>
+            <p className="font-semibold text-slate-900">Что будет после оплаты</p>
             <p className="mt-3 text-slate-700">
-              Мы свяжемся с вами по номеру телефона и на почту, которые вы указали в форме выше, —
-              обычно в течение рабочего дня после поступления оплаты.
+              Свяжемся с вами по телефону и email из формы — обычно в течение рабочего дня после
+              поступления оплаты.
             </p>
             <p className="mt-3 text-slate-700">
-              Согласуем удобное окно для сеанса (дата и время).
+              Согласуем время для настройки доступа: созвон с демонстрацией экрана или пошаговая
+              инструкция — в зависимости от тарифа.
             </p>
             <p className="mt-3 text-slate-700">
-              Услуга оказывается удалённо: подключение через AnyDesk или созвон в Zoom — вы видите
-              экран и контролируете процесс.
+              Помогаем подключить ваши устройства к защищённой сетевой инфраструктуре; вы контролируете
+              действия на своём экране.
             </p>
             <p className="mt-3 text-xs text-slate-600">
-              Физической доставки нет: это дистанционные консультации и настройка.
+              Физической доставки нет: услуга оказывается дистанционно (информационно-техническое
+              сопровождение).
             </p>
             </div>
           </ScrollReveal>
@@ -338,7 +341,7 @@ export default function CartPage() {
               {!canPay && (
                 <p
                   className="max-w-xs text-right text-sm text-slate-600"
-                  title="Добавьте услугу с фиксированной ценой или свяжитесь для индивидуального расчёта"
+                  title="Добавьте тариф с фиксированной ценой или свяжитесь для индивидуального расчёта"
                 >
                   Нет суммы к оплате онлайн — добавьте тариф с ценой или свяжитесь с нами.
                 </p>

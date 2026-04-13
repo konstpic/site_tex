@@ -7,12 +7,18 @@ import {
 import { buildPricedOrderFromLines } from "@/lib/payment-order";
 import { getPaymentGateway, getPaymentSuccessReturnUrl } from "@/lib/payment-gateway";
 import {
-  buildRobokassaPaymentFormFields,
-  buildRobokassaReceipt,
-  generateRobokassaInvId,
-  ROBOKASSA_PAYMENT_URL,
-} from "@/lib/robokassa-client";
-import { robokassaPendingGet, robokassaPendingPut } from "@/lib/robokassa-pending-store";
+  selfworkPendingGet,
+  selfworkPendingMarkSucceeded,
+  selfworkPendingPut,
+} from "@/lib/selfwork-pending-store";
+import {
+  buildSelfworkInfoItems,
+  buildSelfworkInitFormFields,
+  fetchSelfworkPaymentStatus,
+  generateSelfworkOrderId,
+  getSelfworkInitUrl,
+  getSelfworkMerchantConfig,
+} from "@/lib/selfwork-client";
 import { notifyOrderLeadToTelegram } from "@/lib/telegram-order-notify";
 import {
   yooKassaCreatePayment,
@@ -20,7 +26,7 @@ import {
 } from "@/lib/yookassa-client";
 import type { CartLineInput } from "@/lib/payment-order";
 
-/** Статус после возврата с оплаты (ЮKassa API или локальный store Robokassa). */
+/** Статус после возврата с оплаты (ЮKassa API или локальный store Сам.Эквайринг). */
 export async function GET(request: Request) {
   const paymentId = new URL(request.url).searchParams.get("payment_id");
   if (!paymentId?.trim()) {
@@ -30,16 +36,42 @@ export async function GET(request: Request) {
 
   try {
     const gw = getPaymentGateway();
-    if (gw === "robokassa") {
-      const row = robokassaPendingGet(id);
-      if (!row) {
-        return NextResponse.json({ error: "Платёж не найден или истёк" }, { status: 404 });
+    if (gw === "selfwork") {
+      const row = selfworkPendingGet(id);
+      if (row?.status === "succeeded") {
+        return NextResponse.json({
+          id,
+          status: "succeeded",
+          paid: true,
+        });
       }
-      const succeeded = row.status === "succeeded";
+      if (!row) {
+        return NextResponse.json(
+          { error: "Платёж не найден или истёк" },
+          { status: 404 },
+        );
+      }
+      try {
+        const remote = await fetchSelfworkPaymentStatus(id);
+        if (remote?.status === "succeeded" && remote.amount === row.amountKopecks) {
+          selfworkPendingMarkSucceeded(id);
+          return NextResponse.json({
+            id,
+            status: "succeeded",
+            paid: true,
+          });
+        }
+      } catch (e) {
+        const message = e instanceof Error ? e.message : "status error";
+        return NextResponse.json(
+          { error: message },
+          { status: 502 },
+        );
+      }
       return NextResponse.json({
         id,
-        status: succeeded ? "succeeded" : "pending",
-        paid: succeeded,
+        status: "pending",
+        paid: false,
       });
     }
 
@@ -86,27 +118,33 @@ export async function POST(request: Request) {
       gateway: gw,
     });
 
-    if (gw === "robokassa") {
-      const invId = generateRobokassaInvId();
-      robokassaPendingPut(invId, order.amountValue);
-      const receipt = buildRobokassaReceipt({
-        amountValue: order.amountValue,
-        description: order.description,
-        customerEmail: customer.email,
-      });
-      const form = buildRobokassaPaymentFormFields({
-        amountValue: order.amountValue,
-        invId,
-        description: order.description,
-        email: customer.email,
-        receipt,
+    if (gw === "selfwork") {
+      const { secretKey } = getSelfworkMerchantConfig();
+      const infoItems = buildSelfworkInfoItems(
+        lineInputs,
+        order.description,
+        order.totalKopecks,
+      );
+      if (infoItems.length === 0) {
+        return NextResponse.json(
+          { error: "Не удалось сформировать позиции чека" },
+          { status: 400 },
+        );
+      }
+      const orderId = generateSelfworkOrderId();
+      selfworkPendingPut(orderId, order.totalKopecks);
+      const paymentForm = buildSelfworkInitFormFields({
+        orderId,
+        amountKopecks: order.totalKopecks,
+        items: infoItems,
+        secretKey,
       });
       return NextResponse.json({
-        paymentId: invId,
-        paymentProvider: "robokassa",
-        paymentAction: ROBOKASSA_PAYMENT_URL,
+        paymentId: orderId,
+        paymentProvider: "selfwork",
+        paymentAction: getSelfworkInitUrl(),
         paymentMethod: "POST",
-        paymentForm: form,
+        paymentForm,
       });
     }
 

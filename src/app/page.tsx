@@ -3,9 +3,9 @@ import {
   ArrowRightIcon,
   BoltIcon,
   ChatBubbleLeftRightIcon,
-  ClockIcon,
+  GlobeAltIcon,
+  LockClosedIcon,
   ShieldCheckIcon,
-  WrenchScrewdriverIcon,
 } from "@/components/icons";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import type { RevealVariant } from "@/lib/reveal-variants";
@@ -28,45 +28,45 @@ const reviews = [
   {
     name: "Марина К.",
     role: "удалённая работа",
-    text: "Помогли навести порядок в автозагрузке и обновлениях Windows за один созвон. Всё объяснили спокойно, без давления.",
+    text: "Подключили ноутбук и телефон к защищённому каналу за один сеанс. Объяснили простыми словами, зачем шифровать трафик в публичных Wi‑Fi.",
     rating: 5,
   },
   {
     name: "Сергей Т.",
     role: "малый бизнес",
-    text: "Настроили почту и резервное копирование на MacBook. Подключение через AnyDesk — удобно, вижу каждый шаг.",
+    text: "Нужен был порядок с доступом для двух сотрудников. Настроили клиенты, проверили стабильность — работаем уже третий месяц без сюрпризов.",
     rating: 5,
   },
   {
     name: "Елена В.",
     role: "частный клиент",
-    text: "Заявку приняли быстро, попросили скрин ошибки — через 20 минут проблема с установкой программы была решена.",
+    text: "Оплатила тариф «Стандарт», в тот же день получила инструкцию и помощь с первым подключением. Чувствую себя спокойнее в сети.",
     rating: 5,
   },
   {
     name: "Андрей Л.",
     role: "фриланс",
-    text: "Понятная стоимость до начала работ. Комплексный тариф окупился: и сайт в хостинге поправили, и систему ускорили.",
+    text: "Расширенный пакет окупился: и домашний ПК, и планшет в поездках. Поддержка ответила быстро, когда роутер «капризничал».",
     rating: 5,
   },
 ];
 
 const faq = [
   {
-    q: "Как проходит удалённое подключение?",
-    a: "Согласуем время, подключаемся через AnyDesk или созваниваемся в Zoom — вы видите экран и подтверждаете действия. Выход из сеанса в любой момент.",
+    q: "Что именно делает сервис?",
+    a: "Мы оказываем информационно-техническое сопровождение: помогаем организовать доступ к защищённой сетевой инфраструктуре и настроить ваши устройства так, чтобы снизить риски перехвата данных и утечек при работе в интернете.",
   },
   {
-    q: "Это безопасно?",
-    a: "Работаем только в рамках описанной задачи. Не запрашиваем пароли от банков и коды из СМС. Рекомендуем не оставлять посторонних программ после сеанса и при необходимости менять пароли доступа к ПК.",
+    q: "Это замена антивирусу?",
+    a: "Нет. Защищённый канал и гигиена устройств дополняют друг друга. Мы не обещаем «абсолютной безопасности», но помогаем усилить конфиденциальность и целостность трафика в типовых сценариях.",
   },
   {
-    q: "Что если не получится помочь?",
-    a: "Если задача окажется вне компетенции или потребует выездного ремонта железа, честно скажем об этом до оплаты или предложим частичное решение без доплат.",
+    q: "Как проходит подключение?",
+    a: "Вы выбираете тариф и оплачиваете заказ. После оплаты мы связываемся с вами и согласуем формат помощи: созвон и пошаговая настройка на вашем экране или инструкции для самостоятельного подключения — в зависимости от тарифа.",
   },
   {
     q: "Как оплатить?",
-    a: "Оформите заказ на странице «Заказ» и нажмите «Оплатить» — откроется страница ЮKassa для оплаты картой. После оплаты вы вернётесь на сайт, статус платежа отображается автоматически.",
+    a: "На странице «Заказ» нажмите «Оплатить» — откроется защищённая страница платёжного провайдера (ЮKassa или Сам.Эквайринг). После оплаты вы вернётесь на сайт, статус отображается автоматически.",
   },
 ];
 
@@ -88,7 +88,7 @@ export default function HomePage() {
             className="animate-hero-in-left text-sm font-semibold uppercase tracking-wide text-teal-700"
             style={{ animationDelay: "0.04s" }}
           >
-            Только онлайн · без выезда
+            Онлайн-сервис · защищённая инфраструктура
           </p>
           <h1
             className="animate-hero-in-scale font-display mt-4 max-w-3xl text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl"
@@ -100,8 +100,7 @@ export default function HomePage() {
             className="animate-hero-in-right mt-6 max-w-2xl text-lg text-slate-600"
             style={{ animationDelay: "0.22s" }}
           >
-            Настройка Windows и macOS, программы и мессенджеры, базовая помощь с сайтами и
-            хостингом — консультации и пошаговая настройка по удалённому доступу.
+            {SITE.mission}
           </p>
           <div
             className="mt-10 flex flex-col gap-3 sm:flex-row sm:items-center animate-sequence-cta"
@@ -110,7 +109,7 @@ export default function HomePage() {
               href="/services"
               className="group cta-pulse inline-flex items-center justify-center gap-2 rounded-2xl bg-teal-600 px-6 py-3.5 text-base font-semibold text-white shadow-lg shadow-teal-600/25"
             >
-              Заказать услугу
+              Смотреть тарифы
               <ArrowRightIcon
                 className="h-5 w-5 transition-transform duration-300 group-hover:translate-x-1"
                 aria-hidden
@@ -120,14 +119,26 @@ export default function HomePage() {
               href="/contacts"
               className="inline-flex items-center justify-center rounded-2xl border border-slate-300 bg-white px-6 py-3.5 text-base font-semibold text-slate-800 transition-all duration-200 hover:border-teal-300 hover:bg-teal-50/50 hover:shadow-sm"
             >
-              Оставить заявку
+              Задать вопрос
             </Link>
           </div>
           <ul className="stagger-fade-children mt-12 grid gap-4 sm:grid-cols-3">
             {[
-              { icon: ClockIcon, t: "Старт от 15 минут", d: "Согласуем окно в день обращения" },
-              { icon: ShieldCheckIcon, t: "Прозрачные условия", d: "Цена и объём до начала работ" },
-              { icon: BoltIcon, t: "Без выезда", d: "Экономите время — всё дистанционно" },
+              {
+                icon: LockClosedIcon,
+                t: "Защита трафика",
+                d: "Шифрование и безопасный канал к инфраструктуре",
+              },
+              {
+                icon: ShieldCheckIcon,
+                t: "Понятные условия",
+                d: "Состав услуги и цена до оплаты",
+              },
+              {
+                icon: GlobeAltIcon,
+                t: "Дом, офис, дорога",
+                d: "Сценарии для разных сетей и устройств",
+              },
             ].map((x) => (
               <li
                 key={x.t}
@@ -147,21 +158,20 @@ export default function HomePage() {
       <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
         <ScrollReveal variant="fade" durationMs={720} className="text-center">
           <h2 className="font-display text-3xl font-semibold text-slate-900">
-            Что мы делаем
+            Что входит в сервис
           </h2>
           <p className="mx-auto mt-3 max-w-2xl text-slate-600">
-            Фокус на консультациях и настройке — без переустановки системы «с нуля», если она не
-            нужна.
+            Фокус на организации доступа и снижении рисков при работе в сети — без обещаний «волшебной кнопки», с честным описанием возможностей.
           </p>
         </ScrollReveal>
         <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {[
-            "Настройка Windows и macOS: учётные записи, обновления, типовая оптимизация",
-            "Установка и настройка программ под ваши задачи",
-            "Мессенджеры: «Макс», сервисы Яндекса и другие — вход, синхронизация, уведомления",
-            "Сайты: домены, хостинг, базовая публикация и мелкие правки по инструкции",
-            "Ускорение работы ПК: автозагрузка, фоновые процессы, диск, рекомендации",
-            "Удалённая диагностика: ошибки, зависания, сетевые подключения",
+            "Консультации по сценариям: дом, офис, публичные Wi‑Fi, поездки",
+            "Помощь с установкой и настройкой клиента для доступа к защищённой сети",
+            "Проверка соединения, типовых ошибок и конфликтов с сетевыми настройками",
+            "Рекомендации по безопасной работе с данными и учётным записям",
+            "Тарифы для одного пользователя, семьи или небольшой команды",
+            "Индивидуальные сценарии — по согласованию объёма и стоимости",
           ].map((text, i) => (
             <li key={text} className="min-h-0">
               <ScrollReveal
@@ -171,10 +181,7 @@ export default function HomePage() {
                 className="h-full"
               >
                 <div className="card-lift flex h-full gap-3 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-                  <WrenchScrewdriverIcon
-                    className="h-6 w-6 shrink-0 text-teal-600"
-                    aria-hidden
-                  />
+                  <BoltIcon className="h-6 w-6 shrink-0 text-teal-600" aria-hidden />
                   <span className="text-slate-700">{text}</span>
                 </div>
               </ScrollReveal>
@@ -187,25 +194,25 @@ export default function HomePage() {
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <ScrollReveal variant="down" durationMs={750} className="text-center">
             <h2 className="font-display text-3xl font-semibold text-slate-900">
-              Как проходит работа
+              Как это работает
             </h2>
           </ScrollReveal>
           <ol className="mt-12 grid gap-8 md:grid-cols-3">
             {[
               {
                 step: "1",
-                title: "Заявка и уточнение",
-                body: "Опишите задачу в форме или выберите тариф. Согласуем время и способ связи.",
+                title: "Тариф и оплата",
+                body: "Выберите подходящий пакет на странице тарифов и оформите заказ. Оплата — на защищённой странице банка или эквайера.",
               },
               {
                 step: "2",
-                title: "Созвон и доступ",
-                body: "Подключаемся через AnyDesk или работаем в Zoom — вы контролируете процесс.",
+                title: "Связь и настройка",
+                body: "После оплаты мы пишем или звоним, согласуем время и формат: созвон с демонстрацией экрана или пошаговая инструкция.",
               },
               {
                 step: "3",
-                title: "Результат и памятка",
-                body: "Фиксируем сделанные шаги, при необходимости отправляем краткую инструкцию.",
+                title: "Доступ и поддержка",
+                body: "Вы подключаетесь к защищённой инфраструктуре. По тарифу — краткая памятка и ответы на уточняющие вопросы.",
               },
             ].map((s, i) => (
                 <li key={s.step} className="min-h-0">
@@ -236,17 +243,16 @@ export default function HomePage() {
       <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
         <ScrollReveal variant="scale" durationMs={740} className="text-center">
           <h2 className="font-display text-3xl font-semibold text-slate-900">
-            Почему нам доверяют
+            Почему выбирают нас
           </h2>
         </ScrollReveal>
         <div className="mt-12 grid gap-6 md:grid-cols-3">
           <ScrollReveal variant="left" delayMs={0} durationMs={780}>
             <div className="card-lift rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm">
               <ShieldCheckIcon className="mx-auto h-12 w-12 text-teal-600" aria-hidden />
-              <p className="mt-4 font-semibold text-slate-900">Гарантия понятного результата</p>
+              <p className="mt-4 font-semibold text-slate-900">Честные ожидания</p>
               <p className="mt-2 text-sm text-slate-600">
-                Объясняем на русском, без жаргона. Если задача не решается удалённо — скажем до
-                оплаты.
+                Объясняем, что даёт защищённый канал и чего он не заменяет. Если задача вне формата — скажем до оплаты.
               </p>
             </div>
           </ScrollReveal>
@@ -256,19 +262,18 @@ export default function HomePage() {
                 className="mx-auto h-12 w-12 text-teal-600"
                 aria-hidden
               />
-              <p className="mt-4 font-semibold text-slate-900">Поддержка после сеанса</p>
+              <p className="mt-4 font-semibold text-slate-900">Поддержка после подключения</p>
               <p className="mt-2 text-sm text-slate-600">
-                Короткий уточняющий ответ по chat или почте в течение 24 часов после оплаченной
-                услуги.
+                По тарифу — короткий ответ в мессенджере или на почте после оказания услуги, чтобы закрепить результат.
               </p>
             </div>
           </ScrollReveal>
           <ScrollReveal variant="right" delayMs={180} durationMs={780}>
             <div className="card-lift rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm">
-              <ClockIcon className="mx-auto h-12 w-12 text-teal-600" aria-hidden />
-              <p className="mt-4 font-semibold text-slate-900">Уважение к времени</p>
+              <GlobeAltIcon className="mx-auto h-12 w-12 text-teal-600" aria-hidden />
+              <p className="mt-4 font-semibold text-slate-900">Под ваш сценарий</p>
               <p className="mt-2 text-sm text-slate-600">
-                Назначаем слот, придерживаемся длительности тарифа, не затягиваем созвон.
+                Учитываем количество устройств и тип сети: от квартиры до командировок.
               </p>
             </div>
           </ScrollReveal>
@@ -335,16 +340,16 @@ export default function HomePage() {
         durationMs={850}
       >
         <div className="mx-auto max-w-6xl px-4 text-center sm:px-6">
-          <h2 className="font-display text-3xl font-semibold">Готовы начать?</h2>
+          <h2 className="font-display text-3xl font-semibold">Подключиться</h2>
           <p className="mx-auto mt-3 max-w-xl text-teal-100">
-            Выберите тариф или напишите — ответим и предложим ближайшее окно для созвона.
+            Выберите тариф или напишите нам — подскажем, какой вариант лучше подойдёт под ваши устройства и задачи.
           </p>
           <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
             <Link
               href="/cart"
               className="cta-pulse inline-flex rounded-2xl bg-white px-6 py-3.5 text-base font-semibold text-teal-900 hover:bg-teal-50"
             >
-              Перейти к заказу
+              Оформить заказ
             </Link>
             <a
               href={`tel:${SITE.phone}`}

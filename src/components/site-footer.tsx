@@ -17,8 +17,8 @@ export function SiteFooter() {
           <div>
             <p className="font-semibold text-slate-900">{SITE.name}</p>
             <p className="mt-2 max-w-md text-sm text-slate-600">
-              Удалённые консультации и настройка компьютерной техники. Работа через
-              AnyDesk или Zoom — без выезда специалиста.
+              Онлайн-сервис цифрового доступа к защищённой сетевой инфраструктуре. Помогаем усилить
+              безопасность соединения и защиту данных при работе в интернете.
             </p>
             <p className="mt-3 text-sm text-slate-600">
               <a className="font-medium text-teal-700 hover:underline" href={`tel:${SITE.phone}`}>

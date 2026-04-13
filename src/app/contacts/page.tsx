@@ -24,8 +24,8 @@ export default function ContactsPage() {
             className="mt-4 text-lg text-slate-600 animate-fade-in-up"
             style={{ animationDelay: "0.12s" }}
           >
-            Напишите задачу — ответим в рабочее время. Срочные вопросы удобнее продублировать
-            звонком.
+            Задайте вопрос по тарифам или подключению — ответим в рабочее время. Срочнее связаться
+            можно по телефону.
           </p>
           <ul className="mt-8 space-y-4 text-slate-800">
             <li>

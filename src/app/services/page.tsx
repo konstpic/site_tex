@@ -6,9 +6,9 @@ import { sectionRevealVariant } from "@/lib/reveal-variants";
 import { SERVICES, formatPrice } from "@/lib/services";
 
 export const metadata: Metadata = {
-  title: "Услуги и цены",
+  title: "Тарифы",
   description:
-    "Тарифы на удалённую техническую помощь: консультация, настройка системы, комплексная поддержка, индивидуальный расчёт.",
+    "Тарифы доступа к защищённой сетевой инфраструктуре: старт, стандарт, расширенный пакет и индивидуальный расчёт для команд.",
 };
 
 export default function ServicesPage() {
@@ -19,14 +19,14 @@ export default function ServicesPage() {
           className="font-display text-4xl font-semibold tracking-tight text-slate-900 animate-fade-in-up"
           style={{ animationDelay: "0.04s" }}
         >
-          Услуги и цены
+          Тарифы и цены
         </h1>
         <p
           className="mt-4 text-lg text-slate-600 animate-fade-in-up"
           style={{ animationDelay: "0.12s" }}
         >
-          Все работы выполняются дистанционно. Итоговая стоимость фиксируется до оплаты, кроме
-          индивидуального тарифа — там смета после краткого описания задачи.
+          Стоимость фиксируется до оплаты. Индивидуальный тариф — после краткого описания сценария
+          (количество устройств, локации, ограничения сети).
         </p>
       </ScrollReveal>
 
@@ -76,9 +76,8 @@ export default function ServicesPage() {
         className="mt-10"
       >
         <p className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-slate-800">
-          Оплата банковской картой через ЮKassa: после нажатия «Оплатить» на странице заказа вы
-          перейдёте на защищённую страницу платёжного провайдера и вернётесь на сайт после
-          завершения оплаты.
+          Оплата банковской картой через ЮKassa или Сам.Эквайринг: после «Оплатить» на странице заказа
+          откроется защищённая страница провайдера; после оплаты вы вернётесь на сайт.
         </p>
       </ScrollReveal>
     </div>

@@ -123,7 +123,7 @@ function PaymentSuccessContent() {
           <>
             <p className="text-lg font-semibold text-teal-900">Оплата прошла успешно</p>
             <p className="mt-3 text-sm text-teal-800">
-              Заказ принят. Мы свяжемся с вами для назначения времени созвона.
+              Заказ принят. Мы свяжемся с вами для настройки доступа и передачи инструкций.
             </p>
           </>
         )}

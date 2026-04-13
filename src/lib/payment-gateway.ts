@@ -1,14 +1,14 @@
 /**
  * Какой шлюз использовать на сервере (секреты только здесь / в route handlers).
  */
-export type PaymentGateway = "yookassa" | "robokassa";
+export type PaymentGateway = "yookassa" | "selfwork";
 
 export function getPaymentGateway(): PaymentGateway {
   const g = (process.env.PAYMENT_GATEWAY || "yookassa").trim().toLowerCase();
-  return g === "robokassa" ? "robokassa" : "yookassa";
+  return g === "selfwork" ? "selfwork" : "yookassa";
 }
 
-/** URL страницы успеха после оплаты (Robokassa SuccessURL и возврат ЮKassa). */
+/** URL страницы успеха после оплаты (редирект Сам.Эквайринга и ЮKassa). */
 export function getPaymentSuccessReturnUrl(): string {
   const v =
     process.env.PAYMENT_SUCCESS_URL?.trim() ||
