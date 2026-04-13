@@ -18,6 +18,10 @@ const merriweather = Merriweather({
   variable: "--font-merriweather",
 });
 
+/** Подтверждение магазина Сам.Эквайринг: meta name="selfwork.ru" (см. ЛК). */
+const selfworkSiteVerification =
+  process.env.SELFWORK_SITE_VERIFICATION?.trim() || "";
+
 export const metadata: Metadata = {
   title: {
     default: `${SITE.name} — защищённый доступ в сеть`,
@@ -26,6 +30,9 @@ export const metadata: Metadata = {
   description:
     "Онлайн-сервис цифрового доступа к защищённой сетевой инфраструктуре. Повышаем безопасность соединения и защиту данных в интернете.",
   themeColor: "#0d9488",
+  ...(selfworkSiteVerification
+    ? { other: { "selfwork.ru": selfworkSiteVerification } }
+    : {}),
 };
 
 export default function RootLayout({
