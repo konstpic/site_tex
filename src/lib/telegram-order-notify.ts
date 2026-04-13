@@ -5,6 +5,42 @@ import type { ServiceId } from "@/lib/services";
 
 const MAX_MESSAGE_LEN = 3900;
 
+async function sendTelegramSiteMessage(text: string): Promise<void> {
+  const token = process.env.TELEGRAM_BOT_TOKEN?.trim();
+  const chatId = process.env.TELEGRAM_ORDERS_CHAT_ID?.trim();
+  if (!token || !chatId) return;
+
+  let body = text;
+  if (body.length > MAX_MESSAGE_LEN) {
+    body = body.slice(0, MAX_MESSAGE_LEN - 20) + "\n…(обрезано)";
+  }
+
+  const url = `https://api.telegram.org/bot${encodeURIComponent(token)}/sendMessage`;
+
+  try {
+    const res = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        chat_id: chatId,
+        text: body,
+        disable_web_page_preview: true,
+      }),
+      cache: "no-store",
+    });
+    if (!res.ok) {
+      const errBody = await res.text().catch(() => "");
+      console.error(
+        "[telegram-order-notify] sendMessage failed",
+        res.status,
+        errBody.slice(0, 500),
+      );
+    }
+  } catch (e) {
+    console.error("[telegram-order-notify]", e);
+  }
+}
+
 function summarizeLines(lines: CartLineInput[]): string {
   const parts: string[] = [];
   for (const raw of lines) {
@@ -39,14 +75,10 @@ export async function notifyOrderLeadToTelegram(params: {
   lines: CartLineInput[];
   gateway: "yookassa" | "robokassa";
 }): Promise<void> {
-  const token = process.env.TELEGRAM_BOT_TOKEN?.trim();
-  const chatId = process.env.TELEGRAM_ORDERS_CHAT_ID?.trim();
-  if (!token || !chatId) return;
-
   const linesBlock = summarizeLines(params.lines);
   const gwLabel = params.gateway === "robokassa" ? "Robokassa" : "ЮKassa";
 
-  let text = [
+  const text = [
     "Новая заявка с сайта (переход к оплате)",
     "",
     "Клиент:",
@@ -62,32 +94,29 @@ export async function notifyOrderLeadToTelegram(params: {
     `Оплата: ${gwLabel}`,
   ].join("\n");
 
-  if (text.length > MAX_MESSAGE_LEN) {
-    text = text.slice(0, MAX_MESSAGE_LEN - 20) + "\n…(обрезано)";
-  }
+  await sendTelegramSiteMessage(text);
+}
 
-  const url = `https://api.telegram.org/bot${encodeURIComponent(token)}/sendMessage`;
+/**
+ * Заявка из формы на странице «Контакты».
+ * Без токена/чата — no-op; ошибки только в лог.
+ */
+export async function notifyContactFormToTelegram(params: {
+  name: string;
+  email: string;
+  phone: string;
+  message: string;
+}): Promise<void> {
+  const phoneLine = params.phone.trim() ? params.phone.trim() : "—";
+  const text = [
+    "Заявка с формы «Контакты»",
+    "",
+    params.name,
+    params.email,
+    phoneLine,
+    "",
+    params.message,
+  ].join("\n");
 
-  try {
-    const res = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        chat_id: chatId,
-        text,
-        disable_web_page_preview: true,
-      }),
-      cache: "no-store",
-    });
-    if (!res.ok) {
-      const body = await res.text().catch(() => "");
-      console.error(
-        "[telegram-order-notify] sendMessage failed",
-        res.status,
-        body.slice(0, 500),
-      );
-    }
-  } catch (e) {
-    console.error("[telegram-order-notify]", e);
-  }
+  await sendTelegramSiteMessage(text);
 }

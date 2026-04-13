@@ -5,10 +5,37 @@ import { SITE } from "@/lib/site";
 
 export function ContactForm() {
   const [sent, setSent] = useState(false);
+  const [pending, setPending] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setSent(true);
+    setError(null);
+    const form = e.currentTarget;
+    const fd = new FormData(form);
+    const name = String(fd.get("name") ?? "").trim();
+    const email = String(fd.get("email") ?? "").trim();
+    const phone = String(fd.get("phone") ?? "").trim();
+    const message = String(fd.get("message") ?? "").trim();
+
+    setPending(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, phone, message }),
+      });
+      if (!res.ok) {
+        setError("Не удалось отправить. Попробуйте позже или напишите на почту.");
+        return;
+      }
+      setSent(true);
+      form.reset();
+    } catch {
+      setError("Сеть недоступна. Попробуйте позже или напишите на почту.");
+    } finally {
+      setPending(false);
+    }
   }
 
   if (sent) {
@@ -77,6 +104,11 @@ export function ContactForm() {
           placeholder="Кратко опишите задачу и удобный способ связи"
         />
       </div>
+      {error ? (
+        <p className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-800">
+          {error}
+        </p>
+      ) : null}
       <p className="text-xs text-slate-500">
         Нажимая «Отправить», вы соглашаетесь с{" "}
         <a href="/privacy" className="text-teal-700 underline hover:no-underline">
@@ -94,9 +126,10 @@ export function ContactForm() {
       </p>
       <button
         type="submit"
-        className="w-full rounded-xl bg-teal-600 py-3 text-sm font-semibold text-white shadow-sm hover:bg-teal-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600 sm:w-auto sm:px-8"
+        disabled={pending}
+        className="w-full rounded-xl bg-teal-600 py-3 text-sm font-semibold text-white shadow-sm hover:bg-teal-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-teal-600 enabled:hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto sm:px-8"
       >
-        Отправить
+        {pending ? "Отправка…" : "Отправить"}
       </button>
     </form>
   );
