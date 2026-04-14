@@ -410,17 +410,15 @@ export default async function OfferPage() {
             12. Реквизиты Исполнителя
           </h2>
           <p>
-            Полное наименование / статус: {SITE.legalName}. Сведения о государственной
-            регистрации в качестве плательщика налога на профессиональный доход (самозанятого)
-            при необходимости уточняются в{" "}
-            <Link href="/requisites" className="text-teal-700 underline hover:no-underline">
-              разделе «Реквизиты»
-            </Link>{" "}
-            на Сайте.
+            Полное наименование / статус: {SITE.legalName}. Исполнитель является плательщиком
+            налога на профессиональный доход (самозанятым).
+          </p>
+          <p>
+            <strong>ФИО Исполнителя:</strong> {SITE.fullName}
           </p>
           {inn ? (
             <p>
-              <strong>ИНН:</strong> {inn}
+              <strong>ИНН Исполнителя:</strong> {inn}
             </p>
           ) : (
             <p className="text-amber-900">

@@ -43,14 +43,17 @@ export default function RequisitesPage() {
       >
         <section className="card-lift rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
           <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">
-            Идентификационный номер
+            Реквизиты исполнителя
           </h2>
+          <p className="mt-3 text-slate-800">
+            <strong>ФИО:</strong> {SITE.fullName}
+          </p>
           {inn ? (
-            <p className="mt-3 text-lg font-semibold tracking-wide text-slate-900">
+            <p className="mt-2 text-lg font-semibold tracking-wide text-slate-900">
               ИНН: {inn}
             </p>
           ) : (
-            <p className="mt-3 text-sm text-amber-800">
+            <p className="mt-2 text-sm text-amber-800">
               ИНН будет отображён после задания переменной окружения{" "}
               <code className="rounded bg-slate-100 px-1.5 py-0.5 text-slate-800">INN</code> на
               сервере.

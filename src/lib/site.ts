@@ -1,12 +1,14 @@
 const DEFAULT_PHONE = "+79257071892";
 const DEFAULT_PHONE_DISPLAY = "+7 925 707-18-92";
 const DEFAULT_EMAIL = "i@aramanovich.ru";
+const DEFAULT_FULL_NAME = "ФИО Исполнителя";
 
 export const SITE = {
   name: "Морзе Ключ",
   tagline: "Цифровой доступ к защищённой сетевой инфраструктуре",
   mission:
     "Сервис повышает уровень безопасности интернет-соединения и помогает защищать данные при работе в сети.",
+  fullName: process.env.NEXT_PUBLIC_SITE_FULL_NAME?.trim() || DEFAULT_FULL_NAME,
   phone: process.env.NEXT_PUBLIC_SITE_PHONE?.trim() || DEFAULT_PHONE,
   phoneDisplay:
     process.env.NEXT_PUBLIC_SITE_PHONE_DISPLAY?.trim() || DEFAULT_PHONE_DISPLAY,
